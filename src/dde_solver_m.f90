@@ -369,6 +369,8 @@ MODULE DDE_SOLVER_M
   !   CALL RELEASE_INT(YINT)
   !____________________________________________________________________________
 
+  use iso_c_binding
+
   ! Beginning of remaining DDE_SOLVER private variables and arrays.
   ! This private information is used throughout DDE_SOLVER.
 
@@ -404,6 +406,15 @@ MODULE DDE_SOLVER_M
      INTEGER :: TRACKING_LEVEL, MAX_EVENTS, MAX_STEPS, MOVING_AVERAGE
      DOUBLE PRECISION, DIMENSION (:), POINTER :: THIT_EXACTLY
   END TYPE DDE_OPTS
+
+  ! for interfacing with c/c++
+  type, public, bind(c) :: dde_opts_cc
+    real(c_double) :: hinit, hmax
+    logical(c_bool) :: neutral, track_discontinuities, interpolation
+    integer(c_int) :: tracking_level, max_events, max_steps
+    real(c_double) :: max_delay
+    integer(c_int) :: trim_frequency
+  end type dde_opts_cc
 
   TYPE, PUBLIC :: DDE_INT
      DOUBLE PRECISION, DIMENSION (:), POINTER :: TVALS
@@ -2695,6 +2706,123 @@ CONTAINS
 
     RETURN
   END FUNCTION DDE_SET
+
+  ! for interfacing with c/c++
+  function dde_set_cc(n_re_vector, re_vector, &
+         n_ae_vector, ae_vector, &
+         n_jumps, jumps, &
+         n_thit, thit_exactly, &
+         n_direction, direction, &
+         n_isterminal, isterminal,&
+         opts_cc) result (opts)
+    implicit none
+
+    type (dde_opts) :: opts
+    type (dde_opts_cc), intent(in) :: opts_cc
+
+    integer, intent(in) :: n_re_vector, n_ae_vector, n_jumps, n_thit
+    double precision, intent(in) :: re_vector(n_re_vector), ae_vector(n_ae_vector)
+    double precision, intent(in) :: jumps(:), thit_exactly(:)
+    integer, intent(in) :: n_direction
+    integer, intent(in) :: direction(:)
+    integer, intent(in) :: n_isterminal
+    logical, intent(in) :: isterminal(:)
+
+    integer :: ier
+
+    opts%hinit                 = opts_cc%hinit
+    opts%hmax                  = opts_cc%hmax
+    opts%neutral               = opts_cc%neutral
+    opts%track_discontinuities = opts_cc%track_discontinuities
+    opts%interpolation         = opts_cc%interpolation
+    opts%tracking_level        = opts_cc%tracking_level
+    opts%max_events            = opts_cc%max_events
+    opts%max_steps             = opts_cc%max_steps
+    opts%moving_average        = 0
+
+    ! ! opts%max_delay             = opts_cc%max_delay
+    ! ! opts%trim_frequency        = opts_cc%trim_frequency
+
+    if (minval(re_vector)<0d0) then
+       print *, ' all components of re_vector must be non-negative.'
+       stop
+    end if
+    allocate (opts%relerr(n_re_vector),stat=ier)
+    call check_stat(ier,60)
+    myipoint(25) = 1
+    opts%relerr = re_vector
+
+    if (minval(ae_vector)<0d0) then
+       print *, ' all components of ae_vector must be non-negative.'
+       stop
+    end if
+    allocate (opts%abserr(n_ae_vector),stat=ier)
+    call check_stat(ier,60)
+    myipoint(24) = 1
+    opts%abserr = ae_vector
+
+    if (n_jumps .gt. 0) then
+       allocate (opts%jumps(n_jumps),stat=ier)
+       call check_stat(ier,61)
+       myipoint(26) = 1
+       opts%jumps = jumps
+    else
+       nullify (opts%jumps)
+       myipoint(26) = 0
+    end if
+
+    if (n_isterminal .gt. 0) then
+       allocate (opts%isterminal(n_isterminal),stat=ier)
+       call check_stat(ier,62)
+       myipoint(22) = 1
+       opts%isterminal = isterminal
+    else
+       nullify (opts%isterminal)
+       myipoint(22) = 0
+    end if
+
+    if (n_direction .gt. 0) then
+       allocate (opts%direction(n_direction),stat=ier)
+       call check_stat(ier,63)
+       myipoint(23) = 1
+       opts%direction = direction
+    else
+       nullify (opts%direction)
+       myipoint(23) = 0
+    end if
+
+    if (n_thit .gt. 0) then
+       allocate (opts%thit_exactly(n_thit),stat=ier)
+       call check_stat(ier,64)
+       myipoint(27) = 1
+       opts%thit_exactly = thit_exactly
+    else
+       nullify (opts%thit_exactly)
+       myipoint(27) = 0
+    end if
+
+    my_max_delay = 0.0d0
+    my_trim_frequency = 0
+    min_drop = 0
+    if (opts_cc%max_delay>0.0d0) then
+       if (opts%interpolation) then
+          print *, ' the interpolation option may not be used if'
+          print *, ' the solution queue is to be trimmed during'
+          print *, ' the integration. stopping.'
+          stop
+       end if
+       my_max_delay = max(my_max_delay, opts_cc%max_delay)
+       my_trim_frequency = 500
+       min_drop = 100
+       if (opts_cc%trim_frequency > 0) then
+          my_trim_frequency = opts_cc%trim_frequency
+          min_drop = min(min_drop, my_trim_frequency/2)
+       end if
+    end if
+
+    return
+  end function dde_set_cc
+
   !____________________________________________________________________________
 
   SUBROUTINE PRINT_STATS(SOL)

@@ -5,32 +5,27 @@
 
 extern "C" {
 
-  void integrate_dde_1(double* re, double[] re_vector, int* n_re_vector, 
-                       double* ae, double[] ae_vector, int* n_ae_vector, 
-                       double* hinit, double* hmax,
-                       int* n_isterminal, double[] isterminal, 
-                       int* n_jumps, int* n_thit, int* n_direction, 
-                       int[] direction, double[] jumps,
-                       bool* neutral, bool* track_discontinuities,
-                       int* tracking_level, 
-                       bool* interpolation, double* thit_exactly,
-                       int* max_events, int* max_steps, 
-                       int* moving_average, int* max_delay, int* trim_frequency,
-                       int* n_nvar, int[] nvar,
-                       void (*ddes) (),
-                       void (*beta) (),
-                       void (*history) (),
-                       int* n_tspan, double[] tspan,
-                       void (*event_fcn) (), 
-                       void (*change_fcn) (),
-                       void (*out_fcn) (),
-                       void (*user_trim_get) (), 
+  void integrate_dde_1(int* n_nvar, int nvar[],
+                       void (*f_ddes_cc) (double*, int*, int*, double[], double[], double[]),
+                       void (*f_beta_cc) (double*, int*, int*, double[], double[]),
+                       void (*f_history_cc) (double*, int*, double[]),
+                       int* n_tspan, double tspan[],
                        int* sol_npts,
                        double** sol_t_ptr,
                        double** sol_y_ptr,
                        double** sol_te_ptr,
-                       double** sol_ye_ptr);
-
+                       double** sol_ye_ptr,
+                       int* n_re_vector, double re_vector[],
+                       int* n_ae_vector, double ae_vector[],
+                       int* n_jumps, double jumps[],
+                       int* n_thit, double thit_exactly[],
+                       int* n_direction, int direction[],
+                       int* n_isterminal, bool isterminal[],
+                       struct dde_opts_cc* opts_cc,
+                       void (*f_event_fcn_cc) (double*, int*, int*, double[], double[], double[], double[]),
+                       void (*f_change_fcn_cc) (int*, int*, double*, double[], double[], double*, int*, int[], int*, bool[], bool*),
+                       void (*f_out_fcn_cc) (double* t, double[], double[], int*, int*),
+                       void (*f_user_trim_get_cc) ());
 }
 
 #endif

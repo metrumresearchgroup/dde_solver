@@ -7,11 +7,11 @@ CXX = clang++
 FFLAGS = -cpp -O2 -ffree-line-length-none
 
 debug: FFLAGS += -g -DDEBUG -O0
-debug: $(LIB_DDE_DIR)/libdde_solver.a
+debug: $(LIB_DDE_DIR)/lib/libdde_solver.a
 
 BLAS=-framework Accelerate
 
-all: $(LIB_DDE_DIR)/libdde_solver.a
+all: $(LIB_DDE_DIR)/lib/libdde_solver.a
 
 $(LIB_DDE_DIR)/src/%.o : $(LIB_DDE_DIR)/src/%.f90
 	$(FC) $(FFLAGS) $(CPPFLAGS) -J$(dir $@) -c $< -o $@
@@ -26,7 +26,7 @@ CXXFLAGS = -I$(LIB_DDE_DIR)/include -std=c++14
 # FAT_WRAPPER  := $(LIB_DDE_DIR)/src/integrate_dde_solver.o
 # $(FAT_WRAPPER) : $(FAT_FWD_OBJS) $(FAT_TLM_OBJS)
 
-$(LIB_DDE_DIR)/libdde_solver.a : $(LIB_DDE_DIR)/src/dde_solver_m.o $(LIB_DDE_DIR)/src/dde_solver_bind.o
+$(LIB_DDE_DIR)/lib/libdde_solver.a : $(LIB_DDE_DIR)/src/dde_solver_m.o $(LIB_DDE_DIR)/src/dde_solver_bind.o
 	$(AR) $(ARFLAGS) $@ $^
 
 LDFLAGS += $(LIB_DDE_DIR)/libdde_solver.a
