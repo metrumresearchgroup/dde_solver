@@ -35,13 +35,13 @@ module dde_solver_bind
      end subroutine f_beta_cc
   end interface
   interface
-     subroutine f_change_fcn_cc(n,nevent,tevent,yevent,dyevent,hinit, &
+     subroutine f_change_fcn_cc(nevent,tevent,yevent,dyevent,hinit, &
           n_direction, direction,&
           n_isterminal, isterminal, quit) bind (c)
-       integer :: nevent, n, n_direction, n_isterminal
+       integer :: nevent, n_direction, n_isterminal
        integer, dimension(n_direction) :: direction
        double precision :: tevent,hinit
-       double precision, dimension(n) :: yevent,dyevent
+       double precision, dimension(nevent) :: yevent,dyevent
        logical :: quit
        logical, dimension(n_isterminal) :: isterminal
        intent(in) :: nevent,tevent
@@ -76,7 +76,10 @@ contains
   subroutine integrate_dde_1(&
        n_nvar, nvar, ddes_cc, beta_cc, history_cc,&
        n_tspan, tspan, &
-       sol_npts, sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr,&
+       ! output
+       sol_npts, sol_flag, sol_ne, &
+       sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr,&
+       ! input parameters
        n_re_vector, re_vector, &
        n_ae_vector, ae_vector, &
        n_jumps, jumps, &
@@ -89,18 +92,18 @@ contains
     use dde_solver_m
     implicit none
 
-    integer, intent(in) :: n_re_vector, n_ae_vector, n_jumps, n_thit
-    double precision, intent(in) :: re_vector(n_re_vector)
-    double precision, intent(in) :: ae_vector(n_ae_vector)
-    double precision, intent(in) :: jumps(n_jumps), thit_exactly(n_thit)
+    integer(c_int), intent(in) :: n_re_vector, n_ae_vector, n_jumps, n_thit
+    real(c_double), intent(in) :: re_vector(n_re_vector)
+    real(c_double), intent(in) :: ae_vector(n_ae_vector)
+    real(c_double), intent(in) :: jumps(n_jumps), thit_exactly(n_thit)
     integer, intent(in) :: n_direction
-    integer, intent(in) :: direction(n_direction)
+    integer(c_int), intent(in) :: direction(n_direction)
     integer, intent(in) :: n_isterminal
-    logical, intent(in) :: isterminal(n_isterminal)
+    logical(c_bool), intent(in) :: isterminal(n_isterminal)
     type (dde_opts_cc), intent(in) :: opts_cc
 
     integer, intent(in) :: n_tspan, n_nvar
-    double precision :: tspan(n_tspan)
+    real(c_double) :: tspan(n_tspan)
     integer :: nvar(n_nvar)
 
     procedure(f_ddes_cc)          :: ddes_cc
@@ -110,7 +113,7 @@ contains
     procedure(f_change_fcn_cc)   , optional :: change_fcn_cc
     procedure(f_out_fcn_cc)      , optional :: out_fcn_cc
     procedure(f_user_trim_get_cc), optional :: user_trim_get_cc
-    integer, intent(out) :: sol_npts
+    integer(c_int), intent(out) :: sol_npts, sol_flag, sol_ne
     type(c_ptr) :: sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr
 
     ! local
@@ -120,6 +123,7 @@ contains
     logical :: have_change
     logical :: have_out
     logical :: have_trim
+    logical :: isterminal_ff(n_isterminal)
 
     integer :: i
 
@@ -128,12 +132,16 @@ contains
     have_out = present(out_fcn_cc)
     have_trim = present(user_trim_get_cc)
 
+    ! fortran's logical is logical(4), while logical(c_bool)
+    ! is logical(1)
+    isterminal_ff = isterminal
+
     options = dde_set_cc(n_re_vector, re_vector, &
          n_ae_vector, ae_vector, &
          n_jumps, jumps, &
          n_thit, thit_exactly, &
          n_direction, direction, &
-         n_isterminal, isterminal, &
+         n_isterminal, isterminal_ff, &
          opts_cc)
 
     if(have_event) then
@@ -230,11 +238,13 @@ contains
        endif
     endif
 
+    sol_npts = sol%npts
+    sol_flag = sol%flag
+    sol_ne = sol%ne
     sol_t_ptr = c_loc(sol%t)
     sol_y_ptr = c_loc(sol%y)
     sol_te_ptr = c_loc(sol%te)
     sol_ye_ptr = c_loc(sol%ye)
-    sol_npts = sol%npts
 
     ! call print_stats(sol)
     ! call release_arrays(sol, options)
@@ -276,7 +286,7 @@ contains
       logical, dimension(:) :: isterminal
       intent(in) :: nevent,tevent
       intent(inout) :: yevent,dyevent,hinit,direction,isterminal,quit
-      call change_fcn_cc(size(yevent), nevent, tevent, yevent, dyevent, hinit, &
+      call change_fcn_cc(nevent, tevent, yevent, dyevent, hinit, &
            size(direction), direction,&
            size(isterminal), isterminal, quit)
     end subroutine change_fcn

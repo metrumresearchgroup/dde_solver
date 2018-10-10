@@ -1,3 +1,0 @@
-* C binding
-** 
-[[https://stackoverflow.com/questions/19341593/how-to-use-fortran-module-subroutine-in-c]]
