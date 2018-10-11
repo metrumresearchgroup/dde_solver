@@ -9,11 +9,22 @@
 
 struct dde_solver_ex441_test : public testing::Test {
   static double tau, omega;
+
+  // output
   int sol_npts, sol_flag, sol_ne;
   double* sol_t_ptr;
   double* sol_y_ptr;
   double* sol_te_ptr;
   double* sol_ye_ptr;
+  double* sol_queue_ptr;
+  double* sol_yoft_ptr;
+  double* sol_tqueue_ptr;
+  int* sol_stats_ptr;
+  int* sol_ie_ptr;
+  int* sol_ipoint_ptr;
+  bool sol_shift;
+  double sol_tshift;
+
   std::vector<int> nvar{4, 2};
   int n_nvar = nvar.size();
   std::vector<double> tspan{0.0, 350.0};
@@ -83,8 +94,11 @@ TEST_F(dde_solver_ex441_test, sol) {
   integrate_dde_4(&n_nvar, nvar.data(),
                   ddes_cc, &nvar[1], delay.data(), &nvar[0], history.data(),
                   &n_tspan, tspan.data(),
-                  &sol_npts, &sol_flag, &sol_ne,
-                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr,
+                  &sol_npts, &sol_flag, &sol_ne,                    // output
+                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr, // output
+                  &sol_queue_ptr, &sol_yoft_ptr, &sol_tqueue_ptr,   // output
+                  &sol_stats_ptr, &sol_ie_ptr, &sol_ipoint_ptr,     // output
+                  &sol_shift, &sol_tshift,                          // output
                   &nre, re_vector.data(),
                   &nae, ae_vector.data(),
                   &n_jumps, jumps,
@@ -107,11 +121,21 @@ TEST_F(dde_solver_ex441_test, sol) {
 }
 
 struct dde_solver_ex442_test : public testing::Test {
+  // output
   int sol_npts, sol_flag, sol_ne;
   double* sol_t_ptr;
   double* sol_y_ptr;
   double* sol_te_ptr;
   double* sol_ye_ptr;
+  double* sol_queue_ptr;
+  double* sol_yoft_ptr;
+  double* sol_tqueue_ptr;
+  int* sol_stats_ptr;
+  int* sol_ie_ptr;
+  int* sol_ipoint_ptr;
+  bool sol_shift;
+  double sol_tshift;
+
   std::vector<int> nvar{1, 1};
   int n_nvar = nvar.size();
   std::vector<double> tspan{0.0, 100.0};
@@ -150,8 +174,11 @@ TEST_F(dde_solver_ex442_test, sol) {
   integrate_dde_4(&n_nvar, nvar.data(),
                   ddes_cc, &nvar[1], delay.data(), &nvar[0], history.data(),
                   &n_tspan, tspan.data(),
-                  &sol_npts, &sol_flag, &sol_ne,
-                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr,
+                  &sol_npts, &sol_flag, &sol_ne,                    // output
+                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr, // output
+                  &sol_queue_ptr, &sol_yoft_ptr, &sol_tqueue_ptr,   // output
+                  &sol_stats_ptr, &sol_ie_ptr, &sol_ipoint_ptr,     // output
+                  &sol_shift, &sol_tshift,                          // output
                   &nre, re_vector.data(),
                   &nae, ae_vector.data(),
                   &n_jumps, jumps,
@@ -171,11 +198,21 @@ struct dde_solver_ex443_test : public testing::Test {
   static bool useODEmodel;
   static constexpr double d=5.0, c=0.5, g=1.0, n=100.0;
 
+  // output
   int sol_npts, sol_flag, sol_ne;
   double* sol_t_ptr;
   double* sol_y_ptr;
   double* sol_te_ptr;
   double* sol_ye_ptr;
+  double* sol_queue_ptr;
+  double* sol_yoft_ptr;
+  double* sol_tqueue_ptr;
+  int* sol_stats_ptr;
+  int* sol_ie_ptr;
+  int* sol_ipoint_ptr;
+  bool sol_shift;
+  double sol_tshift;
+
   std::vector<int> nvar{6, 1, 1};
   int n_nvar = nvar.size();
   std::vector<double> tspan{0.0, 4 * d};
@@ -248,8 +285,11 @@ TEST_F(dde_solver_ex443_test, sol) {
   integrate_dde_4(&n_nvar, nvar.data(),
                   ddes_cc, &nvar[1], delay.data(), &nvar[0], history.data(),
                   &n_tspan, tspan.data(),
-                  &sol_npts, &sol_flag, &sol_ne,
-                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr,
+                  &sol_npts, &sol_flag, &sol_ne,                    // output
+                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr, // output
+                  &sol_queue_ptr, &sol_yoft_ptr, &sol_tqueue_ptr,   // output
+                  &sol_stats_ptr, &sol_ie_ptr, &sol_ipoint_ptr,     // output
+                  &sol_shift, &sol_tshift,                          // output
                   &nre, re_vector.data(),
                   &nae, ae_vector.data(),
                   &n_jumps, jumps,
@@ -277,11 +317,21 @@ struct dde_solver_ex445_test : public testing::Test {
   static constexpr double t0 = 0.0, tfinal = 12.0;
   static constexpr int nout = 1000;
 
+  // output
   int sol_npts, sol_flag, sol_ne;
   double* sol_t_ptr;
   double* sol_y_ptr;
   double* sol_te_ptr;
   double* sol_ye_ptr;
+  double* sol_queue_ptr;
+  double* sol_yoft_ptr;
+  double* sol_tqueue_ptr;
+  int* sol_stats_ptr;
+  int* sol_ie_ptr;
+  int* sol_ipoint_ptr;
+  bool sol_shift;
+  double sol_tshift;
+
   std::vector<int> nvar{2, 1, 2};
   int n_nvar = nvar.size();
   std::vector<double> tspan;
@@ -354,8 +404,11 @@ TEST_F(dde_solver_ex445_test, sol) {
   integrate_dde_4(&n_nvar, nvar.data(),
                   ddes_cc, &nvar[1], delay.data(), &nvar[0], history.data(),
                   &n_tspan, tspan.data(),
-                  &sol_npts, &sol_flag, &sol_ne,
-                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr,
+                  &sol_npts, &sol_flag, &sol_ne,                    // output
+                  &sol_t_ptr, &sol_y_ptr, &sol_te_ptr, &sol_ye_ptr, // output
+                  &sol_queue_ptr, &sol_yoft_ptr, &sol_tqueue_ptr,   // output
+                  &sol_stats_ptr, &sol_ie_ptr, &sol_ipoint_ptr,     // output
+                  &sol_shift, &sol_tshift,                          // output
                   &nre, re_vector.data(),
                   &nae, ae_vector.data(),
                   &n_jumps, jumps,

@@ -80,6 +80,9 @@ contains
        ! output
        sol_npts, sol_flag, sol_ne, &
        sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr,&
+       sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr,&
+       sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr,&
+       sol_shift, sol_tshift, &
        ! input parameters
        n_re_vector, re_vector, &
        n_ae_vector, ae_vector, &
@@ -114,8 +117,14 @@ contains
     procedure(f_change_fcn_cc)   , optional :: change_fcn_cc
     procedure(f_out_fcn_cc)      , optional :: out_fcn_cc
     procedure(f_user_trim_get_cc), optional :: user_trim_get_cc
+
+    ! output
     integer(c_int), intent(out) :: sol_npts, sol_flag, sol_ne
     type(c_ptr) :: sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr
+    type(c_ptr) :: sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr
+    type(c_ptr) :: sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr
+    logical(c_bool), intent(out) :: sol_shift
+    real(c_double), intent(out) :: sol_tshift
 
     ! local
     type (dde_opts) :: options
@@ -239,13 +248,22 @@ contains
        endif
     endif
 
-    sol_npts = sol%npts
-    sol_flag = sol%flag
-    sol_ne = sol%ne
-    sol_t_ptr = c_loc(sol%t)
-    sol_y_ptr = c_loc(sol%y)
-    sol_te_ptr = c_loc(sol%te)
-    sol_ye_ptr = c_loc(sol%ye)
+    ! copy to C output
+    sol_npts       = sol%npts
+    sol_flag       = sol%flag
+    sol_ne         = sol%ne
+    sol_t_ptr      = c_loc(sol%t)
+    sol_y_ptr      = c_loc(sol%y)
+    sol_te_ptr     = c_loc(sol%te)
+    sol_ye_ptr     = c_loc(sol%ye)
+    sol_queue_ptr  = c_loc(sol%queue)
+    sol_yoft_ptr   = c_loc(sol%yoft)
+    sol_tqueue_ptr = c_loc(sol%tqueue)
+    sol_stats_ptr  = c_loc(sol%stats)
+    sol_ie_ptr     = c_loc(sol%ie)
+    sol_ipoint_ptr = c_loc(sol%ipoint)
+    sol_shift      = sol%shift
+    sol_tshift     = sol%tshift
 
     ! call print_stats(sol)
     ! call release_arrays(sol, options)
@@ -317,6 +335,9 @@ contains
        ! output
        sol_npts, sol_flag, sol_ne, &
        sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr,&
+       sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr,&
+       sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr,&
+       sol_shift, sol_tshift, &
        ! input parameters
        n_re_vector, re_vector, &
        n_ae_vector, ae_vector, &
@@ -353,8 +374,14 @@ contains
     procedure(f_change_fcn_cc)   , optional :: change_fcn_cc
     procedure(f_out_fcn_cc)      , optional :: out_fcn_cc
     procedure(f_user_trim_get_cc), optional :: user_trim_get_cc
+
+    ! output
     integer(c_int), intent(out) :: sol_npts, sol_flag, sol_ne
     type(c_ptr) :: sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr
+    type(c_ptr) :: sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr
+    type(c_ptr) :: sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr
+    logical(c_bool), intent(out) :: sol_shift
+    real(c_double), intent(out) :: sol_tshift
 
     ! local
     type (dde_opts) :: options
@@ -478,13 +505,22 @@ contains
        endif
     endif
 
-    sol_npts = sol%npts
-    sol_flag = sol%flag
-    sol_ne = sol%ne
-    sol_t_ptr = c_loc(sol%t)
-    sol_y_ptr = c_loc(sol%y)
-    sol_te_ptr = c_loc(sol%te)
-    sol_ye_ptr = c_loc(sol%ye)
+    ! copy to C output
+    sol_npts       = sol%npts
+    sol_flag       = sol%flag
+    sol_ne         = sol%ne
+    sol_t_ptr      = c_loc(sol%t)
+    sol_y_ptr      = c_loc(sol%y)
+    sol_te_ptr     = c_loc(sol%te)
+    sol_ye_ptr     = c_loc(sol%ye)
+    sol_queue_ptr  = c_loc(sol%queue)
+    sol_yoft_ptr   = c_loc(sol%yoft)
+    sol_tqueue_ptr = c_loc(sol%tqueue)
+    sol_stats_ptr  = c_loc(sol%stats)
+    sol_ie_ptr     = c_loc(sol%ie)
+    sol_ipoint_ptr = c_loc(sol%ipoint)
+    sol_shift      = sol%shift
+    sol_tshift     = sol%tshift
 
     ! call print_stats(sol)
     ! call release_arrays(sol, options)
@@ -547,6 +583,9 @@ contains
        ! output
        sol_npts, sol_flag, sol_ne, &
        sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr,&
+       sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr,&
+       sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr,&
+       sol_shift, sol_tshift, &
        ! input parameters
        n_re_vector, re_vector, &
        n_ae_vector, ae_vector, &
@@ -582,8 +621,14 @@ contains
     procedure(f_change_fcn_cc)   , optional :: change_fcn_cc
     procedure(f_out_fcn_cc)      , optional :: out_fcn_cc
     procedure(f_user_trim_get_cc), optional :: user_trim_get_cc
+
+    ! output
     integer(c_int), intent(out) :: sol_npts, sol_flag, sol_ne
     type(c_ptr) :: sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr
+    type(c_ptr) :: sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr
+    type(c_ptr) :: sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr
+    logical(c_bool), intent(out) :: sol_shift
+    real(c_double), intent(out) :: sol_tshift
 
     ! local
     type (dde_opts) :: options
@@ -707,13 +752,22 @@ contains
        endif
     endif
 
-    sol_npts = sol%npts
-    sol_flag = sol%flag
-    sol_ne = sol%ne
-    sol_t_ptr = c_loc(sol%t)
-    sol_y_ptr = c_loc(sol%y)
-    sol_te_ptr = c_loc(sol%te)
-    sol_ye_ptr = c_loc(sol%ye)
+    ! copy to C output
+    sol_npts       = sol%npts
+    sol_flag       = sol%flag
+    sol_ne         = sol%ne
+    sol_t_ptr      = c_loc(sol%t)
+    sol_y_ptr      = c_loc(sol%y)
+    sol_te_ptr     = c_loc(sol%te)
+    sol_ye_ptr     = c_loc(sol%ye)
+    sol_queue_ptr  = c_loc(sol%queue)
+    sol_yoft_ptr   = c_loc(sol%yoft)
+    sol_tqueue_ptr = c_loc(sol%tqueue)
+    sol_stats_ptr  = c_loc(sol%stats)
+    sol_ie_ptr     = c_loc(sol%ie)
+    sol_ipoint_ptr = c_loc(sol%ipoint)
+    sol_shift      = sol%shift
+    sol_tshift     = sol%tshift
 
     ! call print_stats(sol)
     ! call release_arrays(sol, options)
@@ -777,6 +831,9 @@ contains
        ! output
        sol_npts, sol_flag, sol_ne, &
        sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr,&
+       sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr,&
+       sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr,&
+       sol_shift, sol_tshift, &
        ! input parameters
        n_re_vector, re_vector, &
        n_ae_vector, ae_vector, &
@@ -812,8 +869,14 @@ contains
     procedure(f_change_fcn_cc)   , optional :: change_fcn_cc
     procedure(f_out_fcn_cc)      , optional :: out_fcn_cc
     procedure(f_user_trim_get_cc), optional :: user_trim_get_cc
+
+    ! output
     integer(c_int), intent(out) :: sol_npts, sol_flag, sol_ne
     type(c_ptr) :: sol_t_ptr, sol_y_ptr, sol_te_ptr, sol_ye_ptr
+    type(c_ptr) :: sol_queue_ptr, sol_yoft_ptr, sol_tqueue_ptr
+    type(c_ptr) :: sol_stats_ptr, sol_ie_ptr, sol_ipoint_ptr
+    logical(c_bool), intent(out) :: sol_shift
+    real(c_double), intent(out) :: sol_tshift
 
     ! local
     type (dde_opts) :: options
@@ -937,13 +1000,22 @@ contains
        endif
     endif
 
-    sol_npts = sol%npts
-    sol_flag = sol%flag
-    sol_ne = sol%ne
-    sol_t_ptr = c_loc(sol%t)
-    sol_y_ptr = c_loc(sol%y)
-    sol_te_ptr = c_loc(sol%te)
-    sol_ye_ptr = c_loc(sol%ye)
+    ! copy to C output
+    sol_npts       = sol%npts
+    sol_flag       = sol%flag
+    sol_ne         = sol%ne
+    sol_t_ptr      = c_loc(sol%t)
+    sol_y_ptr      = c_loc(sol%y)
+    sol_te_ptr     = c_loc(sol%te)
+    sol_ye_ptr     = c_loc(sol%ye)
+    sol_queue_ptr  = c_loc(sol%queue)
+    sol_yoft_ptr   = c_loc(sol%yoft)
+    sol_tqueue_ptr = c_loc(sol%tqueue)
+    sol_stats_ptr  = c_loc(sol%stats)
+    sol_ie_ptr     = c_loc(sol%ie)
+    sol_ipoint_ptr = c_loc(sol%ipoint)
+    sol_shift      = sol%shift
+    sol_tshift     = sol%tshift
 
     ! call print_stats(sol)
     ! call release_arrays(sol, options)
@@ -1001,4 +1073,3 @@ contains
   end subroutine integrate_dde_4
 
 end module dde_solver_bind
-
