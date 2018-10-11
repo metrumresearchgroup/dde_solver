@@ -14,15 +14,19 @@ LDFLAGS += -framework accelerate # for macOS to link BLAS/LAPACK
 LDFLAGS += -Wl,-no_compact_unwind
 
 gtest : $(GTEST)/src/gtest-all.o
-all : sol1_test sol4_test
+all : sol1_test sol2_test sol3_test sol4_test
 debug: CXXLAGS += -g -DDEBUG -O0
-debug : sho_test roberts_test species_test
+debug : sol1_test sol2_test sol3_test sol4_test
 
 $(GTEST)/src/gtest-all.o: CXXFLAGS = $(GTEST_CXXFLAGS) -g
 
 %.o : %.cpp $(DDE_SOLVER_DIR)/include/dde_solver.hpp
 	$(COMPILE.cc) -o $@ $<
 sol1_test : sol1_test.o $(GTEST_MAIN) $(GTEST)/src/gtest-all.o $(DDE_SOLVER_DIR)/lib/libdde_solver.a
+	$(LINK.cpp) -o $@ $^
+sol2_test : sol2_test.o $(GTEST_MAIN) $(GTEST)/src/gtest-all.o $(DDE_SOLVER_DIR)/lib/libdde_solver.a
+	$(LINK.cpp) -o $@ $^
+sol3_test : sol3_test.o $(GTEST_MAIN) $(GTEST)/src/gtest-all.o $(DDE_SOLVER_DIR)/lib/libdde_solver.a
 	$(LINK.cpp) -o $@ $^
 sol4_test : sol4_test.o $(GTEST_MAIN) $(GTEST)/src/gtest-all.o $(DDE_SOLVER_DIR)/lib/libdde_solver.a
 	$(LINK.cpp) -o $@ $^
