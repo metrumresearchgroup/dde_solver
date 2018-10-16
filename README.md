@@ -77,9 +77,9 @@ make all
 #include <string>
 #include <math.h>
 
-using dde_solver_cc::DdeUserOption;
-using dde_solver_cc::DdeSol;
-using dde_solver_cc::DdeIntegrator;
+using dde_solver::DdeUserOption;
+using dde_solver::DdeSol;
+using dde_solver::DdeIntegrator;
 
 static constexpr double R=3.5, M=19.0;
 

@@ -122,7 +122,7 @@ extern "C" {
                           f_event_fcn_cc, f_change_fcn_cc, f_out_fcn_cc, f_user_trim_get_cc);
 }
 
-namespace dde_solver_cc {
+namespace dde_solver {
   /*
    * map input @c beta or @c history type. When input is a functor, return itself.
    * @tparam F type of @c F_beta or @c F_his

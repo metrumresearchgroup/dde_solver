@@ -85,9 +85,9 @@ struct TestFn_b2 {
 int TestFn_b2::state = 1;
 
 TEST(dde_solver_test, b2) {
-  using dde_solver_cc::DdeUserOption;
-  using dde_solver_cc::DdeSol;
-  using dde_solver_cc::DdeIntegrator;
+  using dde_solver::DdeUserOption;
+  using dde_solver::DdeSol;
+  using dde_solver::DdeIntegrator;
 
   TestFn_b2 test_fn;
   using Dde = DdeUserOption<TestFn_b2::FnDdes, TestFn_b2::FnBeta, TestFn_b2::FnHistory,
@@ -138,9 +138,9 @@ TEST(dde_solver_test, b2) {
 }
 
 TEST(dde_solver_test, b2g) {
-  using dde_solver_cc::DdeUserOption;
-  using dde_solver_cc::DdeSol;
-  using dde_solver_cc::DdeIntegrator;
+  using dde_solver::DdeUserOption;
+  using dde_solver::DdeSol;
+  using dde_solver::DdeIntegrator;
   
   TestFn_b2 test_fn;
   using Dde = DdeUserOption<TestFn_b2::FnDdes2, TestFn_b2::FnBeta, TestFn_b2::FnHistory,
@@ -207,9 +207,9 @@ TEST(dde_solver_test, b2g) {
 }
 
 TEST(dde_solver_test, ex444) {
-  using dde_solver_cc::DdeUserOption;
-  using dde_solver_cc::DdeSol;
-  using dde_solver_cc::DdeIntegrator;
+  using dde_solver::DdeUserOption;
+  using dde_solver::DdeSol;
+  using dde_solver::DdeIntegrator;
   
   static constexpr double R=3.5, M=19.0;
 
@@ -345,9 +345,9 @@ TEST(dde_solver_test, ex444) {
 }
 
 TEST(dde_solver_test, exsd1) {
-  using dde_solver_cc::DdeUserOption;
-  using dde_solver_cc::DdeSol;
-  using dde_solver_cc::DdeIntegrator;
+  using dde_solver::DdeUserOption;
+  using dde_solver::DdeSol;
+  using dde_solver::DdeIntegrator;
   
   struct FnDdes {
     std::vector<double> operator()(const double& t,
@@ -444,9 +444,9 @@ TEST(dde_solver_test, exsd1) {
 }
 
 TEST(dde_solver_test, ex441) {
-  using dde_solver_cc::DdeUserOption;
-  using dde_solver_cc::DdeSol;
-  using dde_solver_cc::DdeIntegrator;
+  using dde_solver::DdeUserOption;
+  using dde_solver::DdeSol;
+  using dde_solver::DdeIntegrator;
   
   struct FnDdes {
     std::vector<double> operator()(const double& t,
