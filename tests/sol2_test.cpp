@@ -52,11 +52,11 @@ struct dde_solver_ex444_test : public testing::Test {
     opts_cc.interpolation = true;
   }
 
-  static void ddes_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags, const double y[], const double z[], double dy[]) {
     dy[0] = R * y[0] * (1.0 - z[0] / M);
   }
 
-  static void history_cc(double* t, int* n, double y[]) {
+  static void history_cc(const double* t, const int* n, double y[]) {
     // Use the JUMPS option to tell solver about
     // the discontinuity at t = 0.
     if (*t == 0.0) {
@@ -67,7 +67,7 @@ struct dde_solver_ex444_test : public testing::Test {
   }
 
   // event function
-  static void ef_cc(double* t, int* n, int* nlag, double y[], double dy[], double z[], double g[]) {
+  static void ef_cc(const double* t, const int* n, const int* nlag, const double y[], const double dy[], const double z[], double g[]) {
     double ylag = z[0];
     g[0] = dy[0];
     g[1] = dy[0];

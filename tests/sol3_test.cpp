@@ -47,11 +47,11 @@ struct dde_solver_exsd1_test : public testing::Test {
 
   dde_solver_exsd1_test() {}
 
-  static void ddes_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags, const double y[], const double z[], double dy[]) {
     dy[0] = y[0] * z[0] / (*t);
   }
 
-  static void beta_cc(double* t, int* n, int* nlags, double y[], double bval[]) {
+  static void beta_cc(const double* t, const int* n, const int* nlags, const double y[], double bval[]) {
     bval[0] = log(y[0]);
   }
 };

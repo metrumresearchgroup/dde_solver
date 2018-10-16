@@ -47,7 +47,8 @@ struct dde_solver_b2_test : public testing::Test {
 
   dde_solver_b2_test() {}
 
-  static void ddes_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags,
+                      const double y[], const double z[], double dy[]) {
     double ylag = z[0];
     double f;
     if (ylag < 0.0) {
@@ -58,7 +59,8 @@ struct dde_solver_b2_test : public testing::Test {
     dy[0] = f - y[0];
   }
 
-  static void ddes2_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes2_cc(const double* t, const int* n, const int* nlags,
+                       const double y[], const double z[], double dy[]) {
     double f;
     if (state < 0.0) {
       f = 1.0;
@@ -68,25 +70,26 @@ struct dde_solver_b2_test : public testing::Test {
     dy[0] = f - y[0];
   }
 
-  static void history_cc(double* t, int* n, double y[]) {
+  static void history_cc(const double* t, const int* n, double y[]) {
     y[0] = 1.0;
   }
 
-  static void beta_cc(double* t, int* n, int* nlags, double y[], double bval[]) {
+  static void beta_cc(const double* t, const int* n, const int* nlags, const double y[], double bval[]) {
     bval[0] = *t/2.0;
   }
 
   // event function
-  static void ef_cc(double* t, int* n, int* nlag, double y[], double dy[], double z[], double g[]) {
+  static void ef_cc(const double* t, const int* n, const int* nlag,
+                    const double y[], const double dy[], const double z[], double g[]) {
     double ylag = z[0];
     g[0] = ylag;
   }
 
   // change function when an event occurs
-  static void chng_cc(int* nevent, double* tevent,
+  static void chng_cc(const int* nevent, const double* tevent,
                       double yevent[], double dyevent[], double* hinit,
-                      int* n_direction, int direction[],
-                      int* n_isterminal, bool isterminal[], bool* quit) {
+                      const int* n_direction, int direction[],
+                      const int* n_isterminal, bool isterminal[], bool* quit) {
     if (*nevent == 1) {
       state = -state;
     }
@@ -139,7 +142,7 @@ TEST_F(dde_solver_b2_test, b2) {
 
   for (size_t i = 0; i < sol_y_tail.size(); ++i) {
     EXPECT_FLOAT_EQ(sol_y_ptr[sol_npts - sol_y_tail.size() + i], sol_y_tail[i]);
-  }  
+  }
 }
 
 TEST_F(dde_solver_b2_test, b2g) {
@@ -173,7 +176,7 @@ TEST_F(dde_solver_b2_test, b2g) {
   EXPECT_EQ(sol_npts, 26);
   EXPECT_EQ(sol_flag, 0);       // solution successful
 
-  // // Fortran solutions at the first/last 3 points
+  // Fortran solutions at the first/last 3 points
   std::vector<double> sol_t_head {0.0, 0.08379309484, 0.2513792845, 0.5865516639};
   std::vector<double> sol_t_tail {7.732039825, 8.356846033, 8.379309484};
   std::cout.precision(10);
@@ -245,7 +248,8 @@ struct dde_solver_c2_test : public testing::Test {
 
   dde_solver_c2_test() {}
 
-  static void ddes_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags,
+                      const double y[], const double z[], double dy[]) {
     double ylag1 = z[0], y1 = y[0];
     dy[0] = -2.0 * ylag1;
     if (state2 == -1) {
@@ -257,27 +261,29 @@ struct dde_solver_c2_test : public testing::Test {
     dy[1] = (ylag1 - y1) / (1.0 + ylag1);
   }
 
-  static void history_cc(double* t, int* n, double y[]) {
+  static void history_cc(const double* t, const int* n, double y[]) {
     y[0] = 1.0;
     y[1] = 0.5;
   }
 
-  static void beta_cc(double* t, int* n, int* nlags, double y[], double bval[]) {
+  static void beta_cc(const double* t, const int* n, const int* nlags,
+                      const double y[], double bval[]) {
     bval[0] = *t - y[1];
   }
 
   // event function
-  static void ef_cc(double* t, int* n, int* nlag, double y[], double dy[], double z[], double g[]) {
+  static void ef_cc(const double* t, const int* n, const int* nlag,
+                    const double y[], const double dy[], const double z[], double g[]) {
     double ylag1 = z[0];
     g[0] = ylag1;
     g[1] = y[0];
   }
 
   // change function when an event occurs
-  static void chng_cc(int* nevent, double* tevent,
+  static void chng_cc(const int* nevent, const double* tevent,
                       double yevent[], double dyevent[], double* hinit,
-                      int* n_direction, int direction[],
-                      int* n_isterminal, bool isterminal[], bool* quit) {
+                      const int* n_direction, int direction[],
+                      const int* n_isterminal, bool isterminal[], bool* quit) {
     if (*nevent == 1) {
       state1 = -state1;
     }

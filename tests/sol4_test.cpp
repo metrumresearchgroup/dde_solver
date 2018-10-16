@@ -51,7 +51,7 @@ struct dde_solver_ex441_test : public testing::Test {
 
   dde_solver_ex441_test() {}
 
-  static void ddes_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags, const double y[], const double z[], double dy[]) {
     // physical parameters
     const double a = 0.330, d = 0.006, lambda = 0.308,
       gamma = 0.040 , epsilon=0.060;
@@ -164,7 +164,7 @@ struct dde_solver_ex442_test : public testing::Test {
     opts_cc.interpolation = true;
   }
 
-  static void ddes_cc(double* t, int* n, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags, const double y[], const double z[], double dy[]) {
     dy[0] = 2.0 * z[0] / (1.0 + pow(z[0], 9.65)) - y[0];
   }
 };
@@ -239,7 +239,7 @@ struct dde_solver_ex443_test : public testing::Test {
 
   dde_solver_ex443_test() {}
 
-  static void ddes_cc(double* t, int* nn, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* nn, const int* nlags, const double y[], const double z[], double dy[]) {
     if (useODEmodel) {
       // integrate the ode model for t <= d:
       dy[0] = -y[0] * y[2]  +  g * y[1];
@@ -260,16 +260,16 @@ struct dde_solver_ex443_test : public testing::Test {
   }
 
     // event function
-  static void ef_cc(double* t, int* n, int* nlag, double y[], double dy[], double z[], double g[]) {
+  static void ef_cc(const double* t, const int* n, const int* nlag,
+                    const double y[], const double dy[], const double z[], double g[]) {
     double ylag = z[0];
     g[0] = (*t) - d;
   }
 
-  static void chng_cc(int* nevent, double* tevent,
+  static void chng_cc(const int* nevent, const double* tevent,
                       double yevent[], double dyevent[], double* hinit,
-                      int* n_direction, int direction[],
-                      int* n_isterminal, bool isterminal[],
-                      bool* quit) {
+                      const int* n_direction, int direction[],
+                      const int* n_isterminal, bool isterminal[], bool* quit) {
     if (*nevent == 1) {
       useODEmodel = false;
     }
@@ -363,7 +363,7 @@ struct dde_solver_ex445_test : public testing::Test {
     }
   }
 
-  static void ddes_cc(double* t, int* nn, int* nlags, double y[], double z[], double dy[]) {
+  static void ddes_cc(const double* t, const int* n, const int* nlags, const double y[], const double z[], double dy[]) {
     double ylag;
     static const double gamma=0.248, beta=1.0, A=0.75, omega=1.37;
     ylag = z[0];
@@ -373,17 +373,17 @@ struct dde_solver_ex445_test : public testing::Test {
   }
 
     // event function
-  static void ef_cc(double* t, int* n, int* nlag, double y[], double dy[], double z[], double g[]) {
+  static void ef_cc(const double* t, const int* n, const int* nlag,
+                    const double y[], const double dy[], const double z[], double g[]) {
     double ylag = z[0];
     g[0] = y[0];
     g[1] = fabs(y[0]) - asin(1.0);
   }
 
-  static void chng_cc(int* nevent, double* tevent,
+  static void chng_cc(const int* nevent, const double* tevent,
                       double yevent[], double dyevent[], double* hinit,
-                      int* n_direction, int direction[],
-                      int* n_isterminal, bool isterminal[],
-                      bool* quit) {
+                      const int* n_direction, int direction[],
+                      const int* n_isterminal, bool isterminal[], bool* quit) {
     // Restart the integration with initial values
     // that correspond to a bounce of the suitcase.
     if (*nevent == 1) {

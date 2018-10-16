@@ -26,12 +26,12 @@ CXXFLAGS = -I$(LIB_DDE_DIR)/include -std=c++14
 # FAT_WRAPPER  := $(LIB_DDE_DIR)/src/integrate_dde_solver.o
 # $(FAT_WRAPPER) : $(FAT_FWD_OBJS) $(FAT_TLM_OBJS)
 
-$(LIB_DDE_DIR)/lib/libdde_solver.a : $(LIB_DDE_DIR)/src/dde_solver_m.o $(LIB_DDE_DIR)/src/dde_solver_bind.o
+$(LIB_DDE_DIR)/lib/libdde_solver.a : $(LIB_DDE_DIR)/src/dde_solver_m.o $(LIB_DDE_DIR)/src/dde_solver_bind.o $(LIB_DDE_DIR)/src/dde_solver_bind_cc.o
 	$(AR) $(ARFLAGS) $@ $^
 
 LDFLAGS += $(LIB_DDE_DIR)/libdde_solver.a
 
 clean:
-	find src -name "*.o" -exec rm {} \;
-	find src -name "*.mod" -exec rm {} \;
-	@rm $(LIB_DDE_DIR)/*.a
+	@find src -name "*.o" -exec rm {} \;
+	@find src -name "*.mod" -exec rm {} \;
+	@find lib -name "*.a" -exec rm {} \;
