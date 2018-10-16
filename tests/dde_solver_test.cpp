@@ -145,7 +145,7 @@ TEST(dde_solver_test, b2g) {
   
   TestFn_b2 test_fn;
   using Dde = DdeUserOption<TestFn_b2::FnDdes2, TestFn_b2::FnBeta, TestFn_b2::FnHistory,
-                            TestFn_b2::FnEvent, TestFn_b2::FnChange, nullptr_t, nullptr_t>;
+                            TestFn_b2::FnEvent, TestFn_b2::FnChange>;
   Dde o1(test_fn.ddes2, test_fn.beta, test_fn.his, test_fn.ef, test_fn.chng, nullptr, nullptr);
 
   EXPECT_EQ(!o1.f_event(), false);
@@ -247,7 +247,7 @@ TEST(dde_solver_test, ex444) {
   FnEvent ef;
   std::vector<double> delay{ 0.74 };
   using Dde = DdeUserOption<FnDdes, double, FnHistory,
-                            FnEvent, nullptr_t, nullptr_t, nullptr_t>;
+                            FnEvent>;
   Dde o1(ddes, delay, his, ef, nullptr, nullptr, nullptr);
 
   o1.nvar.resize(3);
@@ -369,8 +369,7 @@ TEST(dde_solver_test, exsd1) {
   FnDdes ddes;
   FnBeta beta;
   std::vector<double> history{ 1.0 };
-  using Dde = DdeUserOption<FnDdes, FnBeta, double,
-                            nullptr_t, nullptr_t, nullptr_t, nullptr_t>;
+  using Dde = DdeUserOption<FnDdes, FnBeta, double>;
   Dde o1(ddes, beta, history, nullptr, nullptr, nullptr, nullptr);
 
   o1.nvar[0] = 1;               // n
@@ -487,8 +486,7 @@ TEST(dde_solver_test, ex441) {
   FnDdes ddes;
   std::vector<double> history{15.0, 0.0, 2.0, 3.0};
   std::vector<double> delay{ 42.0, 0.15 };
-  using Dde = DdeUserOption<FnDdes, double, double,
-                            nullptr_t, nullptr_t, nullptr_t, nullptr_t>;
+  using Dde = DdeUserOption<FnDdes, double, double>;
   Dde o1(ddes, delay, history, nullptr, nullptr, nullptr, nullptr);
 
   o1.nvar[0] = 4;               // n
