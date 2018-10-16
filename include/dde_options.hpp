@@ -6,16 +6,16 @@
 extern "C" {
 
   struct dde_opts_cc {
-    double hinit;
-    double hmax;
-    bool neutral;
-    bool track_discontinuities;
-    bool interpolation;
-    int tracking_level;
-    int max_events;
-    int max_steps;
-    double max_delay;
-    int trim_frequency;
+    double hinit;               // initial step size
+    double hmax;                // max step size
+    bool neutral;               // solve DDE of neutral type
+    bool track_discontinuities; // enable tracking of discontinuities
+    bool interpolation;         // interpolate solutions
+    int tracking_level;         // max discontinuities tracking level
+    int max_events;             // Maximum allowable number of event occurrences
+    int max_steps;              // Maximum allowable number of integration steps.
+    double max_delay;           // upper bound of delay
+    int trim_frequency;         // Frequency of trimming solution queue
   };
 
   double default_rel_err() {

@@ -283,6 +283,9 @@ namespace dde_solver_cc {
            typename F_out = std::nullptr_t,
            typename F_user = std::nullptr_t>
   struct DdeUserOption {
+    static constexpr double default_rel_err = 1.0E-3;
+    static constexpr double default_abs_err = 1.0E-6;
+
     dde_opts_cc opts;
     std::vector<int> nvar;
     std::vector<double> tspan;
@@ -312,8 +315,8 @@ namespace dde_solver_cc {
       ddes_cc    (ddes ),
       beta_cc    (beta ),
       history_cc (his  ),
-      rerr       {default_rel_err()},
-      aerr       {default_abs_err()},
+      rerr       {default_rel_err},
+      aerr       {default_abs_err},
       ef_cc      (ef   ),
       chng_cc    (chng ),
       out_cc     (out  ),
