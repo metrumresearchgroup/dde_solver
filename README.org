@@ -29,7 +29,6 @@ of C bindings for Fortran implementations =DKL_1=, =DKL_2=,
 *** Example
 #+BEGIN_SRC c++
   #include <dde_solver.hpp>
-  #include <dde_options.hpp>
   #include <iostream>
   #include <sstream>
   #include <vector>

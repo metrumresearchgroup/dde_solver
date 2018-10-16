@@ -71,7 +71,6 @@ make all
 
 ```c++
 #include <dde_solver.hpp>
-#include <dde_options.hpp>
 #include <iostream>
 #include <sstream>
 #include <vector>

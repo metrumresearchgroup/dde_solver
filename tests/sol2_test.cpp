@@ -1,5 +1,4 @@
 #include <dde_solver.hpp>
-#include <dde_options.hpp>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <sstream>

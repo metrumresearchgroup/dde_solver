@@ -1,7 +1,6 @@
 #ifndef DDE_SOLVER_HPP
 #define DDE_SOLVER_HPP
 
-#include <dde_options.hpp>
 #include <iostream>
 #include <sstream>
 #include <vector>
