@@ -5,26 +5,28 @@ http://www.radford.edu/~thompson/ffddes/
 and its update
 https://github.com/WarrenWeckesser/dde_solver
 
-* Build the static library
+* Build
+** Library
 To make =lib/libdde_solver.a=
 #+BEGIN_SRC bash
   make all
 #+END_SRC
-* Test
+** Test
 In =tests=
 #+BEGIN_SRC bash
   make all
 #+END_SRC
-C binding tests: =sol1_test=, =sol2_test=, =sol3_test=, =sol4_test=.
-C++ binding tests: =dde_solver_test=.
-* C binding
+- C binding tests: =sol1_test=, =sol2_test=, =sol3_test=, =sol4_test=.
+- C++ binding tests: =dde_solver_test=.
+* Bindings
+** C
 =include/dde_solver.h= contains functions declarations
 of C bindings for Fortran implementations =DKL_1=, =DKL_2=,
 =DKL_3=, and =DKL_4=.
-* C++ binding
+** C++
 =include/dde_solver.hpp= contains a class template
 =DdeIntegrator= as the of C++ binding interface.
-** Example
+*** Example
 #+BEGIN_SRC c++
   #include <dde_solver.hpp>
   #include <dde_options.hpp>
@@ -91,24 +93,6 @@ of C bindings for Fortran implementations =DKL_1=, =DKL_2=,
   using Dde = DdeUserOption<FnDdes, double, FnHistory,
                             FnEvent, nullptr_t, nullptr_t, nullptr_t>;
   Dde o1(ddes, delay, his, ef, nullptr, nullptr, nullptr);
-
-  // user options
-  o1.nvar.resize(3);
-  o1.nvar[0] = 1;               // n: size of DDE system
-  o1.nvar[1] = 1;               // nlags: number of delays
-  o1.nvar[2] = 2;               // nef: number of events
-
-  o1.tspan[0] = 0.0;            // time begin
-  o1.tspan[1] = 40.0;           // time end
-
-  o1.jumps.push_back(0.0);
-  o1.direction.push_back(1);
-  o1.direction.push_back(-1);
-
-  o1.rerr[0] = 1.E-4;           // relative error
-  o1.aerr[0] = 1.E-7;           // absolute error
-
-  o1.opts.interpolation = true;   // allow interpolation
 
   // solution is in @c DdeSol.
   DdeSol sol = DdeIntegrator<Dde>(o1)();

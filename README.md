@@ -1,22 +1,29 @@
-- [Introduction](#org4561907)
-- [Build the static library](#org8b329e9)
-- [Test](#org10f6b62)
-- [C binding](#orgbc76bb0)
-- [C++ binding](#org89cd3b6)
-  - [Example](#org0b272ec)
+- [Introduction](#org4dcdd1e)
+- [Build](#org5fc0436)
+  - [Library](#orgced3bd6)
+  - [Test](#org6d8321e)
+- [Bindings](#org475cdd9)
+  - [C](#org39e1f38)
+  - [C++](#org49dfe8a)
+    - [Example](#org0844dd9)
 
 
 
-<a id="org4561907"></a>
+<a id="org4dcdd1e"></a>
 
 # Introduction
 
 This repo provides a C/C++ binding for the DDE solver originally written by L. Shampine and S. Thompson: <http://www.radford.edu/~thompson/ffddes/> and its update <https://github.com/WarrenWeckesser/dde_solver>
 
 
-<a id="org8b329e9"></a>
+<a id="org5fc0436"></a>
 
-# Build the static library
+# Build
+
+
+<a id="orgced3bd6"></a>
+
+## Library
 
 To make `lib/libdde_solver.a`
 
@@ -25,9 +32,9 @@ make all
 ```
 
 
-<a id="org10f6b62"></a>
+<a id="org6d8321e"></a>
 
-# Test
+## Test
 
 In `tests`
 
@@ -35,26 +42,32 @@ In `tests`
 make all
 ```
 
-C binding tests: `sol1_test`, `sol2_test`, `sol3_test`, `sol4_test`. C++ binding tests: `dde_solver_test`.
+-   C binding tests: `sol1_test`, `sol2_test`, `sol3_test`, `sol4_test`.
+-   C++ binding tests: `dde_solver_test`.
 
 
-<a id="orgbc76bb0"></a>
+<a id="org475cdd9"></a>
 
-# C binding
+# Bindings
+
+
+<a id="org39e1f38"></a>
+
+## C
 
 `include/dde_solver.h` contains functions declarations of C bindings for Fortran implementations `DKL_1`, `DKL_2`, `DKL_3`, and `DKL_4`.
 
 
-<a id="org89cd3b6"></a>
+<a id="org49dfe8a"></a>
 
-# C++ binding
+## C++
 
 `include/dde_solver.hpp` contains a class template `DdeIntegrator` as the of C++ binding interface.
 
 
-<a id="org0b272ec"></a>
+<a id="org0844dd9"></a>
 
-## Example
+### Example
 
 ```c++
 #include <dde_solver.hpp>
@@ -122,24 +135,6 @@ std::vector<double> delay{ 0.74 }; // a single delay
 using Dde = DdeUserOption<FnDdes, double, FnHistory,
                           FnEvent, nullptr_t, nullptr_t, nullptr_t>;
 Dde o1(ddes, delay, his, ef, nullptr, nullptr, nullptr);
-
-// user options
-o1.nvar.resize(3);
-o1.nvar[0] = 1;               // n: size of DDE system
-o1.nvar[1] = 1;               // nlags: number of delays
-o1.nvar[2] = 2;               // nef: number of events
-
-o1.tspan[0] = 0.0;            // time begin
-o1.tspan[1] = 40.0;           // time end
-
-o1.jumps.push_back(0.0);
-o1.direction.push_back(1);
-o1.direction.push_back(-1);
-
-o1.rerr[0] = 1.E-4;           // relative error
-o1.aerr[0] = 1.E-7;           // absolute error
-
-o1.opts.interpolation = true;   // allow interpolation
 
 // solution is in @c DdeSol.
 DdeSol sol = DdeIntegrator<Dde>(o1)();
