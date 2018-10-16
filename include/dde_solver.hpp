@@ -36,9 +36,9 @@ extern "C" {
 
   void integrate_dde_1_cc(void* user_data,
                           const int* n_nvar, const int nvar[],
-                          void (*f_ddes_cc) (const double*, const int*, const int*, const double[], const double[], double[], void* user_data),
-                          void (*f_beta_cc) (const double*, const int*, const int*, const double[], double[], void* user_data),
-                          void (*f_history_cc) (const double*, const int*, double[], void* user_data),
+                          f_ddes_fcn_cc,
+                          f_beta_fcn_cc,
+                          f_history_fcn_cc,
                           const int* n_tspan, double tspan[],
                           // output
                           int* sol_npts, int* sol_nlags, int* sol_ne,
@@ -54,16 +54,13 @@ extern "C" {
                           const int* n_direction, const int direction[],
                           const int* n_isterminal, int isterminal[],
                           const struct dde_opts_cc* opts_cc,
-                          void (*f_event_fcn_cc) (const double*, const int*, const int*, const double[], const double[], const double[], double[], void* user_data),
-                          void (*f_change_fcn_cc) (const int*, const double*, double[], double[], double*, const int*, int[], const int*, bool[], bool*, void* user_data),
-                          void (*f_out_fcn_cc) (double* t, double[], double[], int*, int*, void* user_data),
-                          void (*f_user_trim_get_cc) (void* user_data));
+                          f_event_fcn_cc, f_change_fcn_cc, f_out_fcn_cc, f_user_trim_get_cc);
 
   void integrate_dde_2_cc(void* user_data,
                           const int* n_nvar, const int nvar[],
-                          void (*f_ddes_cc) (const double*, const int*, const int*, const double[], const double[], double[], void* user_data),
+                          f_ddes_fcn_cc,
                           const int* n_delay, const double delay[],
-                          void (*f_history_cc) (const double*, const int*, double[], void* user_data),
+                          f_history_fcn_cc,
                           const int* n_tspan, double tspan[],
                           // output
                           int* sol_npts, int* sol_nlags, int* sol_ne,
@@ -79,15 +76,12 @@ extern "C" {
                           const int* n_direction, const int direction[],
                           const int* n_isterminal, int isterminal[],
                           const struct dde_opts_cc* opts_cc,
-                          void (*f_event_fcn_cc) (const double*, const int*, const int*, const double[], const double[], const double[], double[], void* user_data),
-                          void (*f_change_fcn_cc) (const int*, const double*, double[], double[], double*, const int*, int[], const int*, bool[], bool*, void* user_data),
-                          void (*f_out_fcn_cc) (double* t, double[], double[], int*, int*, void* user_data),
-                          void (*f_user_trim_get_cc) (void* user_data));
+                          f_event_fcn_cc, f_change_fcn_cc, f_out_fcn_cc, f_user_trim_get_cc);
 
   void integrate_dde_3_cc(void* user_data,
                           const int* n_nvar, const int nvar[],
-                          void (*f_ddes_cc) (const double*, const int*, const int*, const double[], const double[], double[], void* user_data),
-                          void (*f_beta_cc) (const double*, const int*, const int*, const double[], double[], void* user_data),
+                          f_ddes_fcn_cc,
+                          f_beta_fcn_cc,
                           const int* n_his, const double history[],
                           const int* n_tspan, double tspan[],
                           // output
@@ -104,14 +98,11 @@ extern "C" {
                           const int* n_direction, const int direction[],
                           const int* n_isterminal, int isterminal[],
                           const struct dde_opts_cc* opts_cc,
-                          void (*f_event_fcn_cc) (const double*, const int*, const int*, const double[], const double[], const double[], double[], void* user_data),
-                          void (*f_change_fcn_cc) (const int*, const double*, double[], double[], double*, const int*, int[], const int*, bool[], bool*, void* user_data),
-                          void (*f_out_fcn_cc) (double* t, double[], double[], int*, int*, void* user_data),
-                          void (*f_user_trim_get_cc) (void* user_data));
+                          f_event_fcn_cc, f_change_fcn_cc, f_out_fcn_cc, f_user_trim_get_cc);
 
   void integrate_dde_4_cc(void* user_data,
                           const int* n_nvar, const int nvar[],
-                          void (*f_ddes_cc) (const double*, const int*, const int*, const double[], const double[], double[], void* user_data),
+                          f_ddes_fcn_cc,
                           const int* n_delay, const double delay[],
                           const int* n_his, const double history[],
                           const int* n_tspan, double tspan[],
@@ -129,10 +120,7 @@ extern "C" {
                           const int* n_direction, const int direction[],
                           const int* n_isterminal, int isterminal[],
                           const struct dde_opts_cc* opts_cc,
-                          void (*f_event_fcn_cc) (const double*, const int*, const int*, const double[], const double[], const double[], double[], void* user_data),
-                          void (*f_change_fcn_cc) (const int*, const double*, double[], double[], double*, const int*, int[], const int*, bool[], bool*, void* user_data),
-                          void (*f_out_fcn_cc) (double* t, double[], double[], int*, int*, void* user_data),
-                          void (*f_user_trim_get_cc) (void* user_data));
+                          f_event_fcn_cc, f_change_fcn_cc, f_out_fcn_cc, f_user_trim_get_cc);
 }
 
 namespace dde_solver_cc {
@@ -286,6 +274,8 @@ namespace dde_solver_cc {
    * @tparam F_his C++ functor with signature f(real) -> vec
    * @tparam F_event C++ functor with signature f(real, vec, vec, vec) -> vec
    * @tparam F_change C++ functor with signature f(real, real, vec, vec, vec_i, vec_bool, bool);
+   * @tparam F_out C++ functor with signature f(real);
+   * @tparam F_user C++ functor with signature f();
    */
   template<typename F_ddes, typename F_beta, typename F_his,
            typename F_event = std::nullptr_t,
