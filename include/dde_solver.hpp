@@ -289,8 +289,10 @@ namespace dde_solver {
     std::vector<int> nvar;
     std::vector<double> tspan;
     const F_ddes& ddes_cc;
-    const typename DdeUserData<F_beta>::type& beta_cc;
-    const typename DdeUserData<F_his>::type& history_cc;
+    const F_beta& beta_cc;
+    const F_his& history_cc;
+    // const typename DdeUserData<F_beta>::type& beta_cc;
+    // const typename DdeUserData<F_his>::type& history_cc;
     std::vector<double> rerr;
     std::vector<double> aerr;
     std::vector<double> jumps;
@@ -478,9 +480,18 @@ namespace dde_solver {
     }
   };
 
+  /*
+   * Integrator for DDE.
+   *
+   * @tparam Dde type of @c DdeUserOptions.
+   */
   template<typename Dde>
   struct DdeIntegrator;
 
+  /*
+   * When @c F_ddes, @c F_beta, and @c F_his are all
+   * functors, we call @c integrate_dde_1_cc()
+   */
   template<typename F_ddes, typename F_beta, typename F_his,
            typename F_event, typename F_change, typename F_out, typename F_user>
   struct DdeIntegrator<DdeUserOption<F_ddes, F_beta, F_his,
@@ -556,12 +567,17 @@ namespace dde_solver {
     }    
   };
 
+  /*
+   * For constant delays, @c F_beta will be the arrary of delays.
+   * We call @c integrate_dde_2_cc() in this case.
+   */
   template<typename F_ddes, typename F_his,
            typename F_event, typename F_change, typename F_out, typename F_user>
-  struct DdeIntegrator<DdeUserOption<F_ddes, double, F_his,
+  struct DdeIntegrator<DdeUserOption<F_ddes, std::vector<double>, F_his,
                                      F_event, F_change, F_out, F_user> >
   {
-    using Dde = DdeUserOption<F_ddes, double, F_his, F_event, F_change, F_out, F_user>;
+    using Dde = DdeUserOption<F_ddes, std::vector<double>, F_his,
+                              F_event, F_change, F_out, F_user>;
 
     Dde& dde;
 
@@ -634,12 +650,17 @@ namespace dde_solver {
     }
   };
 
+  /*
+   * For constant history, @c F_his will be the arrary of history.
+   * We call @c integrate_dde_3_cc() in this case.
+   */
   template<typename F_ddes, typename F_beta,
            typename F_event, typename F_change, typename F_out, typename F_user>
-  struct DdeIntegrator<DdeUserOption<F_ddes, F_beta, double,
+  struct DdeIntegrator<DdeUserOption<F_ddes, F_beta, std::vector<double>,
                                      F_event, F_change, F_out, F_user> >
   {
-    using Dde = DdeUserOption<F_ddes, F_beta, double, F_event, F_change, F_out, F_user>;
+    using Dde = DdeUserOption<F_ddes, F_beta, std::vector<double>,
+                              F_event, F_change, F_out, F_user>;
 
     Dde& dde;
 
@@ -712,12 +733,17 @@ namespace dde_solver {
     }
   };
 
+  /*
+   * Use @c integrate_dde_4_cc() when both delay and history
+   * are arrays.
+   */
   template<typename F_ddes,
            typename F_event, typename F_change, typename F_out, typename F_user>
-  struct DdeIntegrator<DdeUserOption<F_ddes, double, double,
+  struct DdeIntegrator<DdeUserOption<F_ddes, std::vector<double>, std::vector<double>,
                                      F_event, F_change, F_out, F_user> >
   {
-    using Dde = DdeUserOption<F_ddes, double, double, F_event, F_change, F_out, F_user>;
+    using Dde = DdeUserOption<F_ddes, std::vector<double>, std::vector<double>,
+                              F_event, F_change, F_out, F_user>;
 
     Dde& dde;
 

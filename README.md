@@ -1,27 +1,27 @@
-- [Introduction](#org4dcdd1e)
-- [Build](#org5fc0436)
-  - [Library](#orgced3bd6)
-  - [Test](#org6d8321e)
-- [Bindings](#org475cdd9)
-  - [C](#org39e1f38)
-  - [C++](#org49dfe8a)
-    - [Example](#org0844dd9)
+- [Introduction](#org8fc0df9)
+- [Build](#org1b5c01c)
+  - [Library](#orgd2ba20c)
+  - [Test](#orgced505e)
+- [Bindings](#org2cc94b9)
+  - [C](#orgd12ded3)
+  - [C++](#org87803c1)
+    - [Example](#org299eb09)
 
 
 
-<a id="org4dcdd1e"></a>
+<a id="org8fc0df9"></a>
 
 # Introduction
 
 This repo provides a C/C++ binding for the DDE solver originally written by L. Shampine and S. Thompson: <http://www.radford.edu/~thompson/ffddes/> and its update <https://github.com/WarrenWeckesser/dde_solver>
 
 
-<a id="org5fc0436"></a>
+<a id="org1b5c01c"></a>
 
 # Build
 
 
-<a id="orgced3bd6"></a>
+<a id="orgd2ba20c"></a>
 
 ## Library
 
@@ -32,7 +32,7 @@ make all
 ```
 
 
-<a id="org6d8321e"></a>
+<a id="orgced505e"></a>
 
 ## Test
 
@@ -46,26 +46,26 @@ make all
 -   C++ binding tests: `dde_solver_test`.
 
 
-<a id="org475cdd9"></a>
+<a id="org2cc94b9"></a>
 
 # Bindings
 
 
-<a id="org39e1f38"></a>
+<a id="orgd12ded3"></a>
 
 ## C
 
 `include/dde_solver.h` contains functions declarations of C bindings for Fortran implementations `DKL_1`, `DKL_2`, `DKL_3`, and `DKL_4`.
 
 
-<a id="org49dfe8a"></a>
+<a id="org87803c1"></a>
 
 ## C++
 
 `include/dde_solver.hpp` contains a class template `DdeIntegrator` as the of C++ binding interface.
 
 
-<a id="org0844dd9"></a>
+<a id="org299eb09"></a>
 
 ### Example
 
@@ -131,7 +131,7 @@ std::vector<double> delay{ 0.74 }; // a single delay
  * Fortran arguments that are not present. Here they are 
  * @c CHANGE_FCN, @c OUT_FCN, and @c user_trim_get.
  */
-using Dde = DdeUserOption<FnDdes, double, FnHistory,
+using Dde = DdeUserOption<FnDdes, std::vector<double>, FnHistory,
                           FnEvent, nullptr_t, nullptr_t, nullptr_t>;
 Dde o1(ddes, delay, his, ef, nullptr, nullptr, nullptr);
 

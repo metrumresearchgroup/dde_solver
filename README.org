@@ -89,7 +89,7 @@ of C bindings for Fortran implementations =DKL_1=, =DKL_2=,
    ,* Fortran arguments that are not present. Here they are 
    ,* @c CHANGE_FCN, @c OUT_FCN, and @c user_trim_get.
    ,*/
-  using Dde = DdeUserOption<FnDdes, double, FnHistory,
+  using Dde = DdeUserOption<FnDdes, std::vector<double>, FnHistory,
                             FnEvent, nullptr_t, nullptr_t, nullptr_t>;
   Dde o1(ddes, delay, his, ef, nullptr, nullptr, nullptr);
 

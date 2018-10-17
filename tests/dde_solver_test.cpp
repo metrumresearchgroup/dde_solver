@@ -245,7 +245,7 @@ TEST(dde_solver_test, ex444) {
   FnHistory his;
   FnEvent ef;
   std::vector<double> delay{ 0.74 };
-  using Dde = DdeUserOption<FnDdes, double, FnHistory,
+  using Dde = DdeUserOption<FnDdes, std::vector<double>, FnHistory,
                             FnEvent>;
   Dde o1(ddes, delay, his, ef, nullptr, nullptr, nullptr);
 
@@ -368,7 +368,7 @@ TEST(dde_solver_test, exsd1) {
   FnDdes ddes;
   FnBeta beta;
   std::vector<double> history{ 1.0 };
-  using Dde = DdeUserOption<FnDdes, FnBeta, double>;
+  using Dde = DdeUserOption<FnDdes, FnBeta, std::vector<double>>;
   Dde o1(ddes, beta, history, nullptr, nullptr, nullptr, nullptr);
 
   o1.nvar[0] = 1;               // n
@@ -485,7 +485,7 @@ TEST(dde_solver_test, ex441) {
   FnDdes ddes;
   std::vector<double> history{15.0, 0.0, 2.0, 3.0};
   std::vector<double> delay{ 42.0, 0.15 };
-  using Dde = DdeUserOption<FnDdes, double, double>;
+  using Dde = DdeUserOption<FnDdes, std::vector<double>, std::vector<double>>;
   Dde o1(ddes, delay, history, nullptr, nullptr, nullptr, nullptr);
 
   o1.nvar[0] = 4;               // n
